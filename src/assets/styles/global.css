@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  /* Həmin o parlaq Neon Laym rəngi */
+  --color-accent: #D4F458; 
+  --color-primary: #0a0a0a;
+}
+
+body {
+  background-color: transparent;
+  color: white;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* Outline Text (Yalnız çərçivəsi olan yazı) */
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
+  color: transparent;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
+
+/* Bento Grid-ə vizual dərslik üçün */
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(212, 244, 88, 0.2);
+}
+
+
+/* Mövcud @import və @theme kodların yuxarıda qalır... */
+
+@layer utilities {
+  .container {
+    width: 100%;
+    margin-left: auto;     /* Solu avtomatik boşluq buraxır (Mərkəzləmək üçün) */
+    margin-right: auto;    /* Sağı avtomatik boşluq buraxır */
+    padding-left: 1.5rem;  /* Mobildə kənarlardan yapışmasın (24px) */
+    padding-right: 1.5rem; 
+    max-width: 1440px;     /* 👈 ƏSAS MƏQAM: Ekran nə qədər böyük olsa da, 1200px-də dayanır */
+  }
+}
