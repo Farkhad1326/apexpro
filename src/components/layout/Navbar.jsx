@@ -1,40 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Dumbbell, ShoppingCart, User as UserIcon, ChevronDown, Menu, X, LogIn } from 'lucide-react'; // User-i UserIcon olaraq adlandırdıq ki, data ilə qarışmasın
+import { 
+  Dumbbell, ShoppingCart, User as UserIcon, ChevronDown, Menu, X, LogIn, 
+  Layers, BookOpen, HelpCircle 
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
+    // --- STATE ---
     const [isWorkoutsOpen, setIsWorkoutsOpen] = useState(false);
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [mobileSubmenu, setMobileSubmenu] = useState(null);
+    const [mobileSubmenu, setMobileSubmenu] = useState(null); // Accordion üçün
 
     const location = useLocation();
     const navigate = useNavigate();
-    
-    // Auth Context-dən kiçik hərflə 'user' alırıq
     const { user } = useAuth(); 
 
+    // Səhifə dəyişəndə menyunu bağla
     useEffect(() => {
         setIsMobileMenuOpen(false);
         setMobileSubmenu(null);
     }, [location]);
 
+    // Mobil menyu açılanda scrollu kilidlə
     useEffect(() => {
         document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
     }, [isMobileMenuOpen]);
 
     const linkStyles = ({ isActive }) =>
-        `flex items-center gap-1 hover:text-accent transition-colors ${isActive ? 'text-accent font-bold' : 'text-gray-300'}`;
+        `flex items-center gap-1 hover:text-accent transition-colors ${isActive ? 'text-accent font-bold' : 'text-zinc-400'}`;
 
+    // Mobil Accordion Toggle
     const toggleMobileSubmenu = (menuName) => {
         setMobileSubmenu(mobileSubmenu === menuName ? null : menuName);
     };
 
     const handleProfileClick = () => {
-        // DÜZƏLİŞ: Burada 'user' (data) yoxlanmalıdır
         if (user) {
-            navigate('/dashboard'); // DÜZƏLİŞ: /profile yox, /dashboard
+            navigate('/dashboard');
         } else {
             navigate('/auth');
         }
@@ -43,33 +47,38 @@ const Navbar = () => {
 
     return (
         <>
-            {/* ================= DESKTOP NAVBAR ================= */}
-            <nav className="fixed top-0 w-full z-[100] bg-black/60 backdrop-blur-md border-b border-white/10 text-white">
+            {/* ================= DESKTOP NAVBAR (Standart) ================= */}
+            <nav className="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
                 <div className="container h-20 flex items-center justify-between">
                     
                     {/* LOGO */}
                     <Link to="/" className="flex items-center gap-2 group relative z-[110]">
-                        <div className="bg-accent p-2 rounded-lg group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(212,244,88,0.3)]">
+                        <div className="bg-accent p-2 rounded-lg group-hover:rotate-12 transition-transform shadow-[0_0_15px_rgba(212,244,88,0.2)]">
                             <Dumbbell className="text-black" size={24} />
                         </div>
-                        <span className="text-2xl font-black tracking-tighter uppercase italic">Apex</span>
+                        <span className="text-2xl font-black tracking-tighter uppercase italic">Apex<span className="text-accent">Pro</span></span>
                     </Link>
 
-                    {/* LINKS */}
+                    {/* DESKTOP LINKS */}
                     <div className="hidden md:flex items-center gap-8">
-                        <NavLink to="/store" className={linkStyles}>Products</NavLink>
+                        <NavLink to="/store" className={linkStyles}>Store</NavLink>
                         
+                        {/* Workouts Dropdown */}
                         <div className="relative group cursor-pointer h-20 flex items-center" 
                              onMouseEnter={() => setIsWorkoutsOpen(true)} 
                              onMouseLeave={() => setIsWorkoutsOpen(false)}>
-                            <div className={`flex items-center gap-1 transition-colors ${location.pathname.includes('/workouts') || location.pathname.includes('/builder') ? 'text-accent' : 'text-gray-300 group-hover:text-accent'}`}>
+                            <div className={`flex items-center gap-1 transition-colors ${location.pathname.includes('/workouts') || location.pathname.includes('/builder') ? 'text-accent' : 'text-zinc-400 group-hover:text-accent'}`}>
                                 Workouts <ChevronDown size={16} className={`transition-transform duration-300 ${isWorkoutsOpen ? 'rotate-180' : ''}`} />
                             </div>
                             {isWorkoutsOpen && (
-                                <div className="absolute top-16 left-0 w-56 pt-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                                    <div className="bg-[#121212] border border-white/10 rounded-xl shadow-2xl p-2">
-                                        <Link to="/workouts" className="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">Routine Database</Link>
-                                        <Link to="/builder" className="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">Routine Builder</Link>
+                                <div className="absolute top-16 left-0 w-56 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div className="bg-[#0f0f11] border border-white/10 rounded-xl shadow-2xl overflow-hidden p-1">
+                                        <Link to="/workouts" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-zinc-300 hover:text-white transition-colors">
+                                            <Layers size={16} /> Routine Database
+                                        </Link>
+                                        <Link to="/builder" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-zinc-300 hover:text-white transition-colors">
+                                            <Dumbbell size={16} /> Routine Builder
+                                        </Link>
                                     </div>
                                 </div>
                             )}
@@ -77,17 +86,22 @@ const Navbar = () => {
 
                         <NavLink to="/exercises" className={linkStyles}>Exercises</NavLink>
                         
+                        {/* More Dropdown */}
                         <div className="relative group cursor-pointer h-20 flex items-center" 
                              onMouseEnter={() => setIsMoreOpen(true)} 
                              onMouseLeave={() => setIsMoreOpen(false)}>
-                            <div className="flex items-center gap-1 text-gray-300 group-hover:text-accent transition-colors">
+                            <div className={`flex items-center gap-1 transition-colors ${location.pathname.includes('/blog') || location.pathname.includes('/faq') ? 'text-accent' : 'text-zinc-400 group-hover:text-accent'}`}>
                                 More <ChevronDown size={16} className={`transition-transform duration-300 ${isMoreOpen ? 'rotate-180' : ''}`} />
                             </div>
                             {isMoreOpen && (
-                                <div className="absolute top-16 left-0 w-48 pt-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                                    <div className="bg-[#121212] border border-white/10 rounded-xl shadow-2xl p-2">
-                                        <Link to="/blog" className="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">Blog & Tips</Link>
-                                        <Link to="/faq" className="block px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-gray-300 hover:text-white transition-colors">FAQ</Link>
+                                <div className="absolute top-16 left-0 w-48 pt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                                    <div className="bg-[#0f0f11] border border-white/10 rounded-xl shadow-2xl overflow-hidden p-1">
+                                        <Link to="/blog" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-zinc-300 hover:text-white transition-colors">
+                                            <BookOpen size={16} /> Blog & Tips
+                                        </Link>
+                                        <Link to="/faq" className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-lg text-sm text-zinc-300 hover:text-white transition-colors">
+                                            <HelpCircle size={16} /> FAQ
+                                        </Link>
                                     </div>
                                 </div>
                             )}
@@ -96,72 +110,161 @@ const Navbar = () => {
 
                     {/* ACTIONS */}
                     <div className="flex items-center gap-3 sm:gap-6 relative z-[110]">
-                        <Link to="/store" className="relative hover:text-accent transition-colors">
-                            <ShoppingCart size={22} />
+                        <Link to="/store" className="relative hover:text-accent transition-colors group">
+                            <ShoppingCart size={22} className="text-zinc-300 group-hover:text-accent" />
                             <span className="absolute -top-2 -right-2 bg-accent text-black text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">0</span>
                         </Link>
                         
-                        {/* PROFILE BUTTON - DÜZƏLDİLDİ */}
+                        {/* PROFILE BUTTON - 'My Profile' yazısı ilə */}
                         <button 
                             onClick={handleProfileClick}
-                            className="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/10 transition group"
+                            className="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/5 transition-all group"
                         >
                             {user ? (
                                 <>
                                     <div className="w-5 h-5 bg-accent text-black rounded-full flex items-center justify-center text-xs font-bold uppercase">
                                         {user.name?.charAt(0) || "U"}
                                     </div>
-                                    <span className="text-sm font-medium group-hover:text-accent transition-colors">Dashboard</span>
+                                    <span className="text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors">My Profile</span>
                                 </>
                             ) : (
                                 <>
-                                    <UserIcon size={18} className="group-hover:text-accent transition-colors text-gray-400" />
-                                    <span className="text-sm font-medium group-hover:text-accent transition-colors">Login</span>
+                                    <UserIcon size={18} className="text-zinc-400 group-hover:text-white transition-colors" />
+                                    <span className="text-sm font-semibold text-zinc-400 group-hover:text-white transition-colors">Login</span>
                                 </>
                             )}
                         </button>
 
+                        {/* HAMBURGER TOGGLE */}
                         <button 
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="md:hidden p-2 bg-white/5 rounded-lg border border-white/10 text-white transition-all active:scale-90"
+                            className="md:hidden p-2 text-zinc-300 hover:text-white transition-colors"
                         >
-                            {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+                            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
                         </button>
                     </div>
                 </div>
             </nav>
 
-            {/* ================= MOBILE MENU OVERLAY ================= */}
-            <div className={`fixed inset-0 z-[90] md:hidden bg-black/95 backdrop-blur-2xl transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-                <div className="container h-full flex flex-col pt-32 pb-10 relative z-10 overflow-y-auto">
-                    <div className="flex flex-col space-y-6 justify-center px-4">
-                        <NavLink to="/" className={({isActive}) => `text-3xl font-black uppercase italic tracking-tighter ${isActive ? 'text-accent' : 'text-white/60'}`}>Home</NavLink>
-                        <NavLink to="/store" className={({isActive}) => `text-3xl font-black uppercase italic tracking-tighter ${isActive ? 'text-accent' : 'text-white/60'}`}>Store</NavLink>
-                        <NavLink to="/exercises" className={({isActive}) => `text-3xl font-black uppercase italic tracking-tighter ${isActive ? 'text-accent' : 'text-white/60'}`}>Exercises</NavLink>
+            {/* ================= ORIGINAL BOLD MOBILE MENU ================= */}
+            <div className={`fixed inset-0 z-[90] md:hidden bg-black/95 backdrop-blur-3xl transition-all duration-500 ease-in-out flex flex-col ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+                
+                {/* Background Text Decor (Su nişanı) */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] font-black text-white/[0.03] uppercase italic pointer-events-none select-none">Apex</div>
+
+                <div className="container h-full flex flex-col pt-28 pb-8 relative z-10 px-6">
+                    
+                    {/* NAV LINKLER (BOLD ITALIC STYLE - İkon yoxdur) */}
+                    <div className="flex flex-col space-y-6 flex-1 justify-center">
+                        
+                        {/* 1. HOME */}
+                        <NavLink 
+                            to="/" 
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={({isActive}) => `text-4xl font-black italic uppercase tracking-tighter transition-colors ${isActive ? 'text-accent' : 'text-white/60 hover:text-white'}`}
+                        >
+                            Home
+                        </NavLink>
+                        
+                        {/* 2. STORE */}
+                        <NavLink 
+                            to="/store" 
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={({isActive}) => `text-4xl font-black italic uppercase tracking-tighter transition-colors ${isActive ? 'text-accent' : 'text-white/60 hover:text-white'}`}
+                        >
+                            Store
+                        </NavLink>
+
+                        {/* 3. WORKOUTS (Accordion) */}
+                        <div className="flex flex-col">
+                            <button 
+                                onClick={() => toggleMobileSubmenu('workouts')} 
+                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors ${mobileSubmenu === 'workouts' ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                            >
+                                Workouts
+                                <ChevronDown className={`transition-transform duration-300 ${mobileSubmenu === 'workouts' ? 'rotate-180 text-accent' : ''}`} size={32} />
+                            </button>
+                            
+                            {/* Submenu */}
+                            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${mobileSubmenu === 'workouts' ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="flex flex-col gap-4 pl-4 border-l-4 border-accent/20">
+                                    <Link to="/workouts" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold uppercase tracking-wide text-zinc-400 hover:text-accent">
+                                        Routine Database
+                                    </Link>
+                                    <Link to="/builder" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold uppercase tracking-wide text-zinc-400 hover:text-accent">
+                                        Routine Builder
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 4. EXERCISES */}
+                        <NavLink 
+                            to="/exercises" 
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={({isActive}) => `text-4xl font-black italic uppercase tracking-tighter transition-colors ${isActive ? 'text-accent' : 'text-white/60 hover:text-white'}`}
+                        >
+                            Exercises
+                        </NavLink>
+
+                        {/* 5. MORE (Accordion) */}
+                        <div className="flex flex-col">
+                            <button 
+                                onClick={() => toggleMobileSubmenu('more')} 
+                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors ${mobileSubmenu === 'more' ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                            >
+                                More
+                                <ChevronDown className={`transition-transform duration-300 ${mobileSubmenu === 'more' ? 'rotate-180 text-accent' : ''}`} size={32} />
+                            </button>
+                            
+                            {/* Submenu */}
+                            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${mobileSubmenu === 'more' ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="flex flex-col gap-4 pl-4 border-l-4 border-accent/20">
+                                    <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold uppercase tracking-wide text-zinc-400 hover:text-accent">
+                                        Blog & Tips
+                                    </Link>
+                                    <Link to="/faq" onClick={() => setIsMobileMenuOpen(false)} className="text-xl font-bold uppercase tracking-wide text-zinc-400 hover:text-accent">
+                                        FAQ
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mt-auto pt-10 px-4">
+                    {/* BOTTOM ACTIONS (2 Böyük Düymə) */}
+                    <div className="grid grid-cols-2 gap-4 mt-auto">
+                        
+                        {/* 1. Login / Profile Button */}
                         <button 
                             onClick={handleProfileClick} 
-                            className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col items-center justify-center gap-2 transition-all active:scale-95"
+                            className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all group"
                         >
                             {user ? (
                                 <>
-                                    <div className="w-8 h-8 bg-accent text-black rounded-full flex items-center justify-center text-sm font-bold uppercase">{user.name?.charAt(0)}</div>
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-accent">Dashboard</span>
+                                    <div className="w-10 h-10 bg-accent text-black rounded-full flex items-center justify-center text-lg font-black group-hover:scale-110 transition-transform">
+                                        {user.name?.charAt(0) || "U"}
+                                    </div>
+                                    <span className="font-bold text-[10px] uppercase tracking-widest text-accent">My Profile</span>
                                 </>
                             ) : (
                                 <>
-                                    <LogIn className="text-white/60" size={28} />
-                                    <span className="font-bold text-[10px] uppercase tracking-widest text-white">Login / Join</span>
+                                    <LogIn className="text-zinc-500 group-hover:text-white transition-colors" size={28} />
+                                    <span className="font-bold text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Login</span>
                                 </>
                             )}
                         </button>
-                        <Link to="/store" className="bg-accent p-6 rounded-3xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all">
-                            <ShoppingCart className="text-black" size={28} />
-                            <span className="font-bold text-[10px] uppercase tracking-widest text-black">Checkout</span>
+                        
+                        {/* 2. Checkout Button */}
+                        <Link 
+                            to="/store" 
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="bg-accent text-black p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_0_20px_rgba(212,244,88,0.2)] hover:bg-[#c9e82e]"
+                        >
+                            <ShoppingCart size={28} />
+                            <span className="font-bold text-[10px] uppercase tracking-widest">Checkout</span>
                         </Link>
                     </div>
+
                 </div>
             </div>
         </>

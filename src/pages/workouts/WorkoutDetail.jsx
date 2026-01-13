@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { workouts } from '../../data/workouts';
-import { FaArrowLeft, FaClock, FaDumbbell, FaSignal, FaCheckCircle, FaChevronDown, FaChevronUp, FaBurn } from 'react-icons/fa';
+import { FaArrowLeft, FaClock, FaDumbbell, FaSignal, FaCheckCircle, FaChevronDown, FaChevronUp, FaBurn, FaTimes } from 'react-icons/fa';
 
 // --- CUSTOM COMPONENTS ---
 import ProtocolRules from '../workouts/components/ProtocolRules'
-import Modal from '../../components/ui/Modal';  // Modal komponenti
-import Button from '../../components/ui/Button'; // Button komponenti
 
 const WorkoutDetail = () => {
   const { id } = useParams();
@@ -21,6 +19,12 @@ const WorkoutDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
+
+  // Modal açıq olanda scroll-u dondurmaq
+  useEffect(() => {
+    document.body.style.overflow = isJoinModalOpen ? 'hidden' : 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isJoinModalOpen]);
 
   if (!workout) {
     return (
@@ -183,15 +187,13 @@ const WorkoutDetail = () => {
                 Confirm protocol selection to synchronize training data.
               </p>
               
-              {/* --- MODALI AÇAN DÜYMƏ --- */}
-              <Button 
-                variant="primary" 
-                size="full" 
+              {/* --- CUSTOM BUTTON --- */}
+              <button
                 onClick={() => setIsJoinModalOpen(true)}
-                className="text-xs tracking-[0.3em] font-black"
+                className="w-full inline-flex items-center justify-center font-black uppercase tracking-[0.3em] transition-all duration-300 rounded-sm cursor-pointer bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-4"
               >
                 Initiate Program
-              </Button>
+              </button>
 
               <div className="mt-6 flex items-center justify-center gap-3 text-[9px] font-black text-zinc-800 tracking-[0.2em]">
                 <FaCheckCircle className="text-neon-green/40" /> SYSTEM_READY
@@ -229,38 +231,66 @@ const WorkoutDetail = () => {
       {/* --- PROTOCOL RULES --- */}
       <ProtocolRules />
 
-      {/* --- MODAL COMPONENT --- */}
-      <Modal 
-        isOpen={isJoinModalOpen} 
-        onClose={() => setIsJoinModalOpen(false)}
-        title="CONFIRM DEPLOYMENT"
-      >
-        <div className="space-y-6">
-          <p className="text-zinc-400 text-sm leading-relaxed">
-            You are about to initiate the <span className="text-neon-green font-bold">{title}</span> protocol. 
-            This will add the routine to your active dashboard and reset your current progress tracking.
-          </p>
-          
-          {/* Kiçik Məlumat Qutusu */}
-          <div className="bg-zinc-900/50 p-4 rounded border border-white/5">
-            <h5 className="text-xs font-bold text-white uppercase mb-2 tracking-widest">Requirements Check:</h5>
-            <ul className="text-xs text-zinc-500 space-y-1 font-mono uppercase">
-              <li>• Equipment: <span className="text-zinc-300">{meta.equipment}</span></li>
-              <li>• Experience: <span className="text-zinc-300">{meta.level}</span></li>
-              <li>• Commitment: <span className="text-zinc-300">{meta.days} Days/Week</span></li>
-            </ul>
-          </div>
+      {/* --- INLINE MODAL --- */}
+      {isJoinModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          {/* Arxa Fon (Qaranlıq) */}
+          <div 
+            className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity" 
+            onClick={() => setIsJoinModalOpen(false)}
+          ></div>
 
-          <div className="flex gap-4 pt-4">
-            <Button variant="ghost" size="full" onClick={() => setIsJoinModalOpen(false)} className="text-xs tracking-widest">
-              Abort
-            </Button>
-            <Button variant="primary" size="full" onClick={handleConfirmJoin} className="text-xs tracking-widest">
-              Confirm Start
-            </Button>
+          {/* Modal Qutusu */}
+          <div className="relative bg-[#18181b] border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
+            
+            {/* Başlıq */}
+            <div className="flex items-center justify-between p-6 border-b border-white/5">
+              <h3 className="text-xl font-black italic text-white uppercase tracking-wider">CONFIRM DEPLOYMENT</h3>
+              <button 
+                onClick={() => setIsJoinModalOpen(false)} 
+                className="text-zinc-500 hover:text-white transition-colors"
+              >
+                <FaTimes size={20} />
+              </button>
+            </div>
+
+            {/* Məzmun */}
+            <div className="p-6">
+              <div className="space-y-6">
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  You are about to initiate the <span className="text-neon-green font-bold">{title}</span> protocol. 
+                  This will add the routine to your active dashboard and reset your current progress tracking.
+                </p>
+                
+                {/* Kiçik Məlumat Qutusu */}
+                <div className="bg-zinc-900/50 p-4 rounded border border-white/5">
+                  <h5 className="text-xs font-bold text-white uppercase mb-2 tracking-widest">Requirements Check:</h5>
+                  <ul className="text-xs text-zinc-500 space-y-1 font-mono uppercase">
+                    <li>• Equipment: <span className="text-zinc-300">{meta.equipment}</span></li>
+                    <li>• Experience: <span className="text-zinc-300">{meta.level}</span></li>
+                    <li>• Commitment: <span className="text-zinc-300">{meta.days} Days/Week</span></li>
+                  </ul>
+                </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button
+                    onClick={() => setIsJoinModalOpen(false)}
+                    className="w-full inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 text-xs py-4"
+                  >
+                    Abort
+                  </button>
+                  <button
+                    onClick={handleConfirmJoin}
+                    className="w-full inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-4"
+                  >
+                    Confirm Start
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </Modal>
+      )}
 
     </div>
   );
