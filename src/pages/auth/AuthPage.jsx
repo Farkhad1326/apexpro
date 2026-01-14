@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/shared/button';
+import { Input } from '@/components/ui/shared/input';
 
 const heroBg = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop";
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
-    const { login } = useAuth(); // Context-dən login funksiyasını götürürük
+    const { login } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Əgər istifadəçi qorunan bir səhifəyə girmək istəyirdisə, login-dən sonra ora qayıtsın
     const from = location.state?.from?.pathname || "/dashboard";
 
     const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -27,16 +28,12 @@ const AuthPage = () => {
         e.preventDefault();
         setIsLoading(true);
 
-        // UX üçün kiçik gecikmə
         setTimeout(() => {
             try {
                 if (isLogin) {
-                    // LOGIN PROSESİ
-                    // Bizim AuthContext-də login bir obyekt qəbul edir
                     login({ email: formData.email, name: formData.name || 'User' });
                     navigate(from, { replace: true });
                 } else {
-                    // REGISTER PROSESİ (Hələlik login ilə eyni məntiq)
                     if (!formData.name) {
                         setIsLoading(false);
                         return setError("Name is required.");
@@ -64,7 +61,7 @@ const AuthPage = () => {
             <div className="w-full max-w-[420px] relative z-20">
                 <div className="bg-[#09090b]/80 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 shadow-2xl overflow-hidden relative group">
                     
-                    {/* Neon Dekorasiya (Dizaynındakı yaşıl xətt) */}
+                    {/* Neon Dekorasiya */}
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#a3e635] to-transparent opacity-50" />
 
                     <div className="text-center mb-10">
@@ -85,14 +82,14 @@ const AuthPage = () => {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {!isLogin && (
                             <div className="group relative">
-                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors">
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors z-10">
                                     <User size={20} />
                                 </div>
-                                <input
+                                <Input
                                     type="text"
                                     name="name"
                                     placeholder="Full Name"
-                                    className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl py-4 pl-12 pr-4 focus:border-[#a3e635] focus:outline-none transition-all"
+                                    className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl h-[52px] pl-12 pr-4 focus:border-[#a3e635] focus-visible:ring-0 focus-visible:ring-offset-0"
                                     value={formData.name}
                                     onChange={handleChange}
                                     required={!isLogin}
@@ -101,14 +98,14 @@ const AuthPage = () => {
                         )}
 
                         <div className="group relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors z-10">
                                 <Mail size={20} />
                             </div>
-                            <input
+                            <Input
                                 type="email"
                                 name="email"
                                 placeholder="Email Address"
-                                className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl py-4 pl-12 pr-4 focus:border-[#a3e635] focus:outline-none transition-all"
+                                className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl h-[52px] pl-12 pr-4 focus:border-[#a3e635] focus-visible:ring-0 focus-visible:ring-offset-0"
                                 value={formData.email}
                                 onChange={handleChange}
                                 required
@@ -116,23 +113,24 @@ const AuthPage = () => {
                         </div>
 
                         <div className="group relative">
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors">
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#a3e635] transition-colors z-10">
                                 <Lock size={20} />
                             </div>
-                            <input
+                            <Input
                                 type="password"
                                 name="password"
                                 placeholder="Password"
-                                className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl py-4 pl-12 pr-4 focus:border-[#a3e635] focus:outline-none transition-all"
+                                className="w-full bg-[#121212] border border-zinc-800 text-white placeholder:text-zinc-600 rounded-xl h-[52px] pl-12 pr-4 focus:border-[#a3e635] focus-visible:ring-0 focus-visible:ring-offset-0"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
                             />
                         </div>
 
-                        <button
+                        <Button
+                            type="submit"
                             disabled={isLoading}
-                            className="w-full group bg-black border border-[#a3e635]/50 text-white font-black uppercase tracking-widest py-4 rounded-xl hover:bg-[#a3e635] hover:text-black transition-all duration-300 flex items-center justify-center gap-2 mt-4 disabled:opacity-50"
+                            className="w-full group bg-black border border-[#a3e635]/50 text-white font-black uppercase tracking-widest h-[52px] rounded-xl hover:bg-[#a3e635] hover:text-black transition-all duration-300 flex items-center justify-center gap-2 mt-4"
                         >
                             {isLoading ? <Loader2 className="animate-spin" /> : (
                                 <>
@@ -140,18 +138,19 @@ const AuthPage = () => {
                                     <ArrowRight size={18} />
                                 </>
                             )}
-                        </button>
+                        </Button>
                     </form>
 
                     <div className="mt-8 pt-6 border-t border-white/5 text-center">
                         <p className="text-zinc-500 text-sm">
                             {isLogin ? "New to Apex?" : "Already have an account?"}
-                            <button
+                            <Button
+                                variant="link"
                                 onClick={() => { setIsLogin(!isLogin); setError(''); }}
-                                className="ml-2 text-white font-bold hover:text-[#a3e635] transition-colors underline underline-offset-4"
+                                className="ml-2 text-white font-bold hover:text-[#a3e635] h-auto p-0 underline underline-offset-4"
                             >
                                 {isLogin ? 'Create Account' : 'Log In'}
-                            </button>
+                            </Button>
                         </p>
                     </div>
                 </div>

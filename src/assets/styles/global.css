@@ -1,48 +1,123 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
+@custom-variant dark (&:is(.dark *));
+
+/* -------------------------------------------------------------------------- */
+/* 1. RƏNGLƏR (TAILWIND THEME) - LIME RƏNGİ BURADADIR                        */
+/* -------------------------------------------------------------------------- */
 @theme {
-  /* Həmin o parlaq Neon Laym rəngi */
-  --color-accent: #D4F458; 
-  --color-primary: #0a0a0a;
+  --font-sans: "Inter", sans-serif;
+  
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
+  /* 🔥 LIME RƏNGİ (Dəyişməz) */
+  --color-primary: #D4F458; 
+  --color-primary-foreground: #000000;
+  
+  --color-accent: #D4F458;
+  --color-accent-foreground: #000000;
+
+  /* Digər rənglər */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: #D4F458;
 }
 
-body {
-  background-color: transparent;
-  color: white;
-  margin: 0;
-  font-family: sans-serif;
+/* -------------------------------------------------------------------------- */
+/* 2. ARXA FON DƏYİŞƏNLƏRİ (LIGHT/DARK)                                      */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  --radius: 0.5rem;
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --destructive: #ef4444;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
 }
 
-/* Outline Text (Yalnız çərçivəsi olan yazı) */
-.text-outline {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
-  color: transparent;
+.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #09090b;
+  --card-foreground: #ffffff;
+  --popover: #09090b;
+  --popover-foreground: #ffffff;
+  --secondary: #27272a;
+  --secondary-foreground: #ffffff;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --destructive: #7f1d1d;
+  --border: #27272a;
+  --input: #27272a;
 }
 
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+/* -------------------------------------------------------------------------- */
+/* 3. ANIMASIYALAR (MANUAL CSS - QƏTİ HƏLL)                                  */
+/* -------------------------------------------------------------------------- */
+
+/* Burda biz animasiyanı Tailwind config-ə yox, birbaşa CSS-ə yazırıq */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% - var(--gap))); }
 }
 
-.animate-scroll {
-  animation: scroll 20s linear infinite;
+@keyframes marquee-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-100% - var(--gap))); }
 }
 
-/* Bento Grid-ə vizual dərslik üçün */
-.hover-glow:hover {
-  box-shadow: 0 0 20px rgba(212, 244, 88, 0.2);
+/* Klassları əl ilə yaradırıq */
+.animate-marquee {
+  animation: marquee var(--duration) linear infinite;
 }
 
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration) linear infinite;
+}
 
-/* Mövcud @import və @theme kodların yuxarıda qalır... */
+/* -------------------------------------------------------------------------- */
+/* 4. BASE STİLLƏR                                                           */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
 
 @layer utilities {
   .container {
     width: 100%;
-    margin-left: auto;     /* Solu avtomatik boşluq buraxır (Mərkəzləmək üçün) */
-    margin-right: auto;    /* Sağı avtomatik boşluq buraxır */
-    padding-left: 1.5rem;  /* Mobildə kənarlardan yapışmasın (24px) */
-    padding-right: 1.5rem; 
-    max-width: 1440px;     /* 👈 ƏSAS MƏQAM: Ekran nə qədər böyük olsa da, 1200px-də dayanır */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    max-width: 1440px;
   }
 }

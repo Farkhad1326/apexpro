@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { workouts } from '../../data/workouts';
-import { FaArrowLeft, FaClock, FaDumbbell, FaSignal, FaCheckCircle, FaChevronDown, FaChevronUp, FaBurn, FaTimes } from 'react-icons/fa';
+import { 
+  FaArrowLeft, FaClock, FaDumbbell, FaSignal, FaCheckCircle, 
+  FaChevronDown, FaChevronUp, FaBurn, FaTimes 
+} from 'react-icons/fa';
+
+// Shadcn komponentləri (sənin qeyd etdiyin path ilə)
+import { Button } from "@/components/ui/shared/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/shared/dialog";
 
 // --- CUSTOM COMPONENTS ---
 import ProtocolRules from '../workouts/components/ProtocolRules'
@@ -10,9 +25,8 @@ const WorkoutDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  // State
   const [activePhase, setActivePhase] = useState(0); 
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // Modal üçün state
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   const workout = workouts.find(w => w.id === parseInt(id));
 
@@ -20,7 +34,6 @@ const WorkoutDetail = () => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Modal açıq olanda scroll-u dondurmaq
   useEffect(() => {
     document.body.style.overflow = isJoinModalOpen ? 'hidden' : 'unset';
     return () => { document.body.style.overflow = 'unset'; };
@@ -39,10 +52,8 @@ const WorkoutDetail = () => {
 
   const { title, image, meta, description, schedule } = workout;
 
-  // Modal Təsdiq Funksiyası
   const handleConfirmJoin = () => {
     setIsJoinModalOpen(false);
-    // Gələcəkdə bura Dashboard-a əlavə etmə kodu gələcək
     alert(`Protocol "${title}" initiated successfully! Synchronization started.`);
   };
 
@@ -156,14 +167,14 @@ const WorkoutDetail = () => {
                             {ex.note && <p className="text-[11px] text-zinc-600 mt-2 italic font-light">{ex.note}</p>}
                           </div>
                           <div className="shrink-0 flex items-center gap-8 md:border-l border-zinc-900 md:pl-8">
-                             <div className="text-center">
-                               <span className="block text-[9px] text-zinc-700 uppercase font-black tracking-tighter">Sets</span>
-                               <span className="block text-lg font-mono font-bold text-zinc-500">{ex.sets}</span>
-                             </div>
-                             <div className="text-center">
-                               <span className="block text-[9px] text-zinc-700 uppercase font-black tracking-tighter">Reps</span>
-                               <span className="block text-lg font-mono font-bold text-neon-green">{ex.reps}</span>
-                             </div>
+                            <div className="text-center">
+                              <span className="block text-[9px] text-zinc-700 uppercase font-black tracking-tighter">Sets</span>
+                              <span className="block text-lg font-mono font-bold text-zinc-500">{ex.sets}</span>
+                            </div>
+                            <div className="text-center">
+                              <span className="block text-[9px] text-zinc-700 uppercase font-black tracking-tighter">Reps</span>
+                              <span className="block text-lg font-mono font-bold text-neon-green">{ex.reps}</span>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -187,13 +198,12 @@ const WorkoutDetail = () => {
                 Confirm protocol selection to synchronize training data.
               </p>
               
-              {/* --- CUSTOM BUTTON --- */}
-              <button
+              <Button
                 onClick={() => setIsJoinModalOpen(true)}
-                className="w-full inline-flex items-center justify-center font-black uppercase tracking-[0.3em] transition-all duration-300 rounded-sm cursor-pointer bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-4"
+                className="w-full font-black uppercase tracking-[0.3em] transition-all duration-300 rounded-sm bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-6 h-auto"
               >
                 Initiate Program
-              </button>
+              </Button>
 
               <div className="mt-6 flex items-center justify-center gap-3 text-[9px] font-black text-zinc-800 tracking-[0.2em]">
                 <FaCheckCircle className="text-neon-green/40" /> SYSTEM_READY
@@ -214,8 +224,8 @@ const WorkoutDetail = () => {
                   <span className="text-zinc-400 font-black">{meta.muscle}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-zinc-900 pb-4">
-                   <span className="text-zinc-600 font-bold">Expertise</span>
-                   <span className="text-zinc-400 font-black">{meta.level}</span>
+                  <span className="text-zinc-600 font-bold">Expertise</span>
+                  <span className="text-zinc-400 font-black">{meta.level}</span>
                 </div>
                 <div className="flex justify-between items-center pt-2">
                   <span className="text-zinc-600 font-bold">Rating</span>
@@ -228,69 +238,54 @@ const WorkoutDetail = () => {
         </div>
       </div>
       
-      {/* --- PROTOCOL RULES --- */}
       <ProtocolRules />
 
-      {/* --- INLINE MODAL --- */}
-      {isJoinModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Arxa Fon (Qaranlıq) */}
-          <div 
-            className="absolute inset-0 bg-black/90 backdrop-blur-sm transition-opacity" 
-            onClick={() => setIsJoinModalOpen(false)}
-          ></div>
+      {/* --- SHADCN DIALOG (Modal) --- */}
+      <Dialog open={isJoinModalOpen} onOpenChange={setIsJoinModalOpen}>
+        <DialogContent className="bg-[#18181b] border border-white/10 max-w-lg rounded-2xl p-0 overflow-hidden">
+          <DialogHeader className="p-6 border-b border-white/5">
+            <DialogTitle className="text-xl font-black italic text-white uppercase tracking-wider">
+              CONFIRM DEPLOYMENT
+            </DialogTitle>
+          </DialogHeader>
 
-          {/* Modal Qutusu */}
-          <div className="relative bg-[#18181b] border border-white/10 w-full max-w-lg rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-200">
-            
-            {/* Başlıq */}
-            <div className="flex items-center justify-between p-6 border-b border-white/5">
-              <h3 className="text-xl font-black italic text-white uppercase tracking-wider">CONFIRM DEPLOYMENT</h3>
-              <button 
-                onClick={() => setIsJoinModalOpen(false)} 
-                className="text-zinc-500 hover:text-white transition-colors"
-              >
-                <FaTimes size={20} />
-              </button>
-            </div>
+          <div className="p-6">
+            <div className="space-y-6">
+              <DialogDescription className="text-zinc-400 text-sm leading-relaxed">
+                You are about to initiate the <span className="text-neon-green font-bold">{title}</span> protocol. 
+                This will add the routine to your active dashboard and reset your current progress tracking.
+              </DialogDescription>
+              
+              <div className="bg-zinc-900/50 p-4 rounded border border-white/5">
+                <h5 className="text-xs font-bold text-white uppercase mb-2 tracking-widest">Requirements Check:</h5>
+                <ul className="text-xs text-zinc-500 space-y-1 font-mono uppercase">
+                  <li>• Equipment: <span className="text-zinc-300">{meta.equipment}</span></li>
+                  <li>• Experience: <span className="text-zinc-300">{meta.level}</span></li>
+                  <li>• Commitment: <span className="text-zinc-300">{meta.days} Days/Week</span></li>
+                </ul>
+              </div>
 
-            {/* Məzmun */}
-            <div className="p-6">
-              <div className="space-y-6">
-                <p className="text-zinc-400 text-sm leading-relaxed">
-                  You are about to initiate the <span className="text-neon-green font-bold">{title}</span> protocol. 
-                  This will add the routine to your active dashboard and reset your current progress tracking.
-                </p>
-                
-                {/* Kiçik Məlumat Qutusu */}
-                <div className="bg-zinc-900/50 p-4 rounded border border-white/5">
-                  <h5 className="text-xs font-bold text-white uppercase mb-2 tracking-widest">Requirements Check:</h5>
-                  <ul className="text-xs text-zinc-500 space-y-1 font-mono uppercase">
-                    <li>• Equipment: <span className="text-zinc-300">{meta.equipment}</span></li>
-                    <li>• Experience: <span className="text-zinc-300">{meta.level}</span></li>
-                    <li>• Commitment: <span className="text-zinc-300">{meta.days} Days/Week</span></li>
-                  </ul>
-                </div>
-
-                <div className="flex gap-4 pt-4">
-                  <button
-                    onClick={() => setIsJoinModalOpen(false)}
-                    className="w-full inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 text-xs py-4"
+              <DialogFooter className="flex gap-4 pt-4 sm:justify-start">
+                <DialogClose asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full font-black uppercase tracking-widest bg-transparent text-zinc-400 hover:text-white hover:bg-white/5 text-xs py-6 h-auto border-white/10"
                   >
                     Abort
-                  </button>
-                  <button
-                    onClick={handleConfirmJoin}
-                    className="w-full inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-4"
-                  >
-                    Confirm Start
-                  </button>
-                </div>
-              </div>
+                  </Button>
+                </DialogClose>
+                
+                <Button
+                  onClick={handleConfirmJoin}
+                  className="w-full font-black uppercase tracking-widest bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs py-6 h-auto"
+                >
+                  Confirm Start
+                </Button>
+              </DialogFooter>
             </div>
           </div>
-        </div>
-      )}
+        </DialogContent>
+      </Dialog>
 
     </div>
   );

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaTrash, FaDumbbell, FaPen, FaTimes, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { Card } from '@/components/ui/shared/card';
+import { Input } from '@/components/ui/shared/input';
+import { Button } from '@/components/ui/shared/button';
 import ExerciseCard from './ExerciseCard';
 
 const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise, onUpdateSets, onRenameDay, onDeleteDay }) => {
@@ -41,7 +44,7 @@ const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise
   };
 
   return (
-    <div 
+    <Card 
       // Click edəndə bu günü "Aktiv" edirik (Inputdan kənar yerə basanda)
       onClick={() => onClick(day.id)}
       
@@ -51,7 +54,7 @@ const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise
       onDrop={handleDrop}
       
       // STİL
-      className={`border rounded-xl transition-all duration-300 mb-4 overflow-hidden ${
+      className={`border rounded-xl transition-all duration-300 mb-4 overflow-hidden shadow-none ${
         isActive 
           ? 'bg-[#121212] border-neon-green shadow-[0_0_20px_rgba(34,197,94,0.1)]' 
           : isOver 
@@ -72,9 +75,9 @@ const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise
             </div>
 
             {/* Day Name Input (StopPropagation vacibdir, yoxsa accordion bağlanar) */}
-            <input 
+            <Input 
                 type="text" 
-                className={`bg-transparent text-lg font-black italic w-full focus:outline-none transition-colors ${isActive ? 'text-white' : 'text-zinc-500'}`}
+                className={`bg-transparent text-lg font-black italic w-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-auto p-0 transition-colors ${isActive ? 'text-white' : 'text-zinc-500'}`}
                 placeholder="Name this day..."
                 value={day.name}
                 onClick={(e) => {
@@ -94,12 +97,13 @@ const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise
             )}
 
             {/* Delete Button */}
-            <button 
+            <Button 
+                variant="ghost"
                 onClick={(e) => { e.stopPropagation(); onDeleteDay(day.id); }} 
-                className="text-zinc-600 hover:text-red-500 transition-colors p-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+                className="text-zinc-600 hover:text-red-500 hover:bg-transparent transition-colors p-2 h-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
             >
                 <FaTimes />
-            </button>
+            </Button>
         </div>
       </div>
 
@@ -131,7 +135,7 @@ const DayContainer = ({ day, isActive, onClick, onDropExercise, onRemoveExercise
         </div>
       </div>
 
-    </div>
+    </Card>
   );
 };
 

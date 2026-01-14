@@ -2,6 +2,9 @@ import React from 'react';
 import { FaDumbbell, FaFire, FaBolt, FaRunning, FaTimes } from 'react-icons/fa';
 import { BiBody } from 'react-icons/bi';
 
+// Shadcn Button (sənin path qaydana uyğun)
+import { Button } from "@/components/ui/shared/button";
+
 // Sabit Kateqoriyalar Siyahısı
 const CATEGORIES = [
   { name: "All", icon: <FaDumbbell /> },
@@ -26,24 +29,28 @@ const FilterSidebar = ({ selectedGoal, setSelectedGoal, isFilterActive, resetFil
 
           {/* YALNIZ FILTR AKTIV OLANDA GÖRÜNÜR */}
           {isFilterActive && (
-            <button 
+            <Button
               onClick={resetFilters}
-              className="text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-1 rounded hover:bg-red-500 hover:text-white transition-all flex items-center gap-1 animate-pulse"
+              variant="outline"
+              size="sm"
+              className="text-[10px] font-bold bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-1 rounded hover:bg-red-500 hover:text-white transition-all flex items-center gap-1 animate-pulse h-auto"
             >
-              <FaTimes /> RESET SYSTEM
-            </button>
+              <FaTimes />
+              RESET SYSTEM
+            </Button>
           )}
         </div>
         
         <div className="flex flex-col space-y-2 border-l border-zinc-800 ml-2">
           {CATEGORIES.map((cat) => (
-            <button
+            <Button
               key={cat.name}
               onClick={() => setSelectedGoal(cat.name)}
-              className={`group relative pl-6 py-3 text-left text-sm uppercase tracking-wider font-bold transition-all duration-300 flex items-center gap-3 ${
+              variant="ghost"
+              className={`group relative pl-6 py-3 text-left text-sm uppercase tracking-wider font-bold transition-all duration-300 flex items-center gap-3 justify-start h-auto rounded-none w-full ${
                 selectedGoal === cat.name 
-                  ? 'text-white' 
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'text-white bg-transparent hover:bg-transparent' 
+                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-transparent'
               }`}
             >
               {/* Active Indicator Line (Neon Bar) */}
@@ -55,7 +62,7 @@ const FilterSidebar = ({ selectedGoal, setSelectedGoal, isFilterActive, resetFil
                 {cat.icon}
               </span>
               {cat.name}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { exercises } from '../../data/exercises';
 import { FaSearch, FaSave, FaPlus, FaLayerGroup, FaDumbbell, FaList } from 'react-icons/fa';
+import { Input } from '@/components/ui/shared/input';
+import { Button } from '@/components/ui/shared/button';
 
 import DraggableExercise from './components/DraggableExercise';
 import DayContainer from './components/DayContainer';
@@ -131,37 +133,37 @@ const RoutineBuilder = () => {
             </h1>
           </div>
           <div className="w-full md:w-auto flex gap-3">
-            <input
+            <Input
               type="text"
               placeholder="Split Name..."
-              className="bg-zinc-900 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-neon-green focus:outline-none w-full md:w-64"
+              className="bg-zinc-900 border border-white/10 rounded-lg h-11 text-white focus:border-neon-green focus-visible:ring-0 focus-visible:ring-offset-0 w-full md:w-64"
               value={workoutName}
               onChange={(e) => setWorkoutName(e.target.value)}
             />
             {/* Save Button */}
-            <button
+            <Button
               onClick={handleSave}
-              className="inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-neon-green text-black hover:bg-white hover:scale-[1.02] text-xs px-6 py-3"
+              className="inline-flex items-center justify-center font-black uppercase tracking-widest transition-all duration-300 rounded-sm cursor-pointer bg-white text-black hover:bg-neon-green hover:text-black hover:scale-[1.02] text-xs h-11 px-6"
             >
               <FaSave className="mr-2" /> Save
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* --- MOBILE TABS --- */}
         <div className="flex lg:hidden bg-zinc-900 p-1 rounded-lg mt-4 mb-2">
-          <button
+          <Button
             onClick={() => setMobileView('builder')}
-            className={`flex-1 py-2 text-xs font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all ${mobileView === 'builder' ? 'bg-neon-green text-black' : 'text-zinc-500'}`}
+            className={`flex-1 h-10 text-xs font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all ${mobileView === 'builder' ? 'bg-neon-green text-black hover:bg-neon-green' : 'text-zinc-500 bg-transparent hover:bg-transparent'}`}
           >
             <FaLayerGroup /> My Split
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setMobileView('library')}
-            className={`flex-1 py-2 text-xs font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all ${mobileView === 'library' ? 'bg-white text-black' : 'text-zinc-500'}`}
+            className={`flex-1 h-10 text-xs font-black uppercase tracking-widest rounded flex items-center justify-center gap-2 transition-all ${mobileView === 'library' ? 'bg-white text-black hover:bg-white' : 'text-zinc-500 bg-transparent hover:bg-transparent'}`}
           >
             <FaList /> Exercises
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -175,11 +177,11 @@ const RoutineBuilder = () => {
         `}>
           <div className="p-4 border-b border-white/5 bg-zinc-900/30 flex-shrink-0">
             <div className="relative group">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-neon-green" />
-              <input
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-neon-green z-10" />
+              <Input
                 type="text"
                 placeholder="Search database..."
-                className="w-full bg-[#18181b] border border-zinc-800 rounded-lg py-3 pl-10 pr-4 text-sm focus:border-neon-green focus:outline-none transition-colors text-white"
+                className="w-full bg-[#18181b] border border-zinc-800 rounded-lg h-11 pl-10 pr-4 text-sm focus:border-neon-green focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors text-white"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -209,20 +211,21 @@ const RoutineBuilder = () => {
               <FaLayerGroup /> {days.length} DAYS
             </div>
 
-            <button
+            <Button
               onClick={() => setMobileView('library')}
-              className="lg:hidden text-xs font-bold uppercase tracking-wider text-neon-green border border-neon-green/20 px-3 py-1 rounded-full"
+              className="lg:hidden text-xs font-bold uppercase tracking-wider text-neon-green border border-neon-green/20 bg-transparent hover:bg-neon-green/10 h-auto px-3 py-1 rounded-full"
             >
               + Add Exercise
-            </button>
+            </Button>
 
-            <button
+            <Button
+              variant="ghost"
               onClick={addDay}
               disabled={days.length >= 7}
-              className="hidden lg:flex text-xs font-bold uppercase tracking-wider text-neon-green hover:text-white transition-colors items-center gap-1 disabled:opacity-50"
+              className="hidden lg:flex text-xs font-bold uppercase tracking-wider text-neon-green hover:text-white hover:bg-transparent transition-colors items-center gap-1 disabled:opacity-50 h-auto p-0"
             >
               <FaPlus /> Add Day
-            </button>
+            </Button>
           </div>
 
           <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar pb-20">
@@ -243,13 +246,14 @@ const RoutineBuilder = () => {
               />
             ))}
 
-            <button
+            <Button
+              variant="ghost"
               onClick={addDay}
-              className="w-full py-6 border border-dashed border-zinc-800 rounded-xl text-zinc-600 hover:border-neon-green hover:text-neon-green transition-all flex flex-col items-center gap-2 group mb-10"
+              className="w-full h-auto py-6 border border-dashed border-zinc-800 rounded-xl text-zinc-600 hover:border-neon-green hover:text-neon-green hover:bg-transparent transition-all flex flex-col items-center gap-2 group mb-10"
             >
               <FaPlus className="group-hover:scale-110 transition-transform" />
               <span className="text-xs font-black uppercase tracking-widest">Add Another Day</span>
-            </button>
+            </Button>
           </div>
 
         </div>

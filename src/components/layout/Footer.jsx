@@ -1,15 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Dumbbell, 
-  Instagram, 
-  Twitter, 
-  Youtube, 
-  Mail, 
-  MapPin, 
+import {
+  Dumbbell,
+  Instagram,
+  Twitter,
+  Youtube,
+  Mail,
+  MapPin,
   Phone,
-  ArrowUpRight 
+  ArrowUpRight
 } from 'lucide-react';
+
+// Shadcn komponentləri
+import { Button } from "@/components/ui/shared/button";
+import { Input } from "@/components/ui/shared/input";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -18,7 +22,7 @@ const Footer = () => {
     <footer className="bg-black pt-24 pb-12 border-t border-white/5 overflow-hidden">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
-          
+
           {/* Sütun 1: Brend və Missiya */}
           <div className="space-y-6">
             <Link to="/" className="flex items-center gap-2 group">
@@ -45,8 +49,8 @@ const Footer = () => {
             <ul className="space-y-4">
               {['Store', 'Workouts', 'Exercises', 'Blog', 'FAQ'].map((item) => (
                 <li key={item}>
-                  <Link 
-                    to={`/${item.toLowerCase()}`} 
+                  <Link
+                    to={`/${item.toLowerCase()}`}
                     className="text-gray-500 hover:text-accent flex items-center gap-2 group transition-colors text-sm"
                   >
                     <ArrowUpRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
@@ -69,19 +73,50 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Sütun 4: Newsletter */}
+          {/* Sütun 4: Newsletter – Shadcn Input + Button */}
+          {/* Sütun 4: Newsletter – Shadcn Input + Button */}
           <div className="space-y-6">
             <h4 className="text-white font-bold uppercase tracking-widest text-sm mb-4 italic">Join the Elite</h4>
             <p className="text-gray-500 text-sm">Subscribe for weekly training protocols and exclusive drops.</p>
+
             <form className="relative group">
-              <input 
-                type="email" 
-                placeholder="Email address" 
-                className="w-full bg-[#111] border border-white/10 rounded-2xl py-4 px-6 text-sm text-white focus:outline-none focus:border-accent transition-all"
+              <Input
+                type="email"
+                placeholder="Email address"
+                className="
+                            w-full 
+                            bg-[#111] 
+                            border border-white/10 
+                            rounded-2xl 
+                            py-4 px-6 
+                            pr-28          {/* ← Əsas dəyişiklik: sağdan əlavə padding (button-un eni + margin) */}
+                            text-sm 
+                            text-white 
+                            focus:outline-none 
+                            focus:border-accent 
+                            transition-all 
+                            h-auto
+                          "
               />
-              <button className="absolute right-2 top-2 bottom-2 bg-accent text-black px-4 rounded-xl font-bold text-xs uppercase hover:scale-95 transition-transform">
+              <Button
+                className="
+                            absolute 
+                            right-2 
+                            top-2 
+                            bottom-2 
+                            bg-accent 
+                            text-black 
+                            px-4 
+                            rounded-xl 
+                            font-bold 
+                            text-xs 
+                            uppercase 
+                            hover:scale-95 
+                            transition-transform
+                          "
+              >
                 Join
-              </button>
+              </Button>
             </form>
           </div>
         </div>
@@ -92,8 +127,8 @@ const Footer = () => {
             © {currentYear} Apex Fitness Collective. All rights reserved.
           </p>
           <div className="flex gap-8 text-[10px] font-black uppercase text-gray-600 tracking-widest">
-            <span className="flex items-center gap-2"><MapPin size={12} className="text-accent"/> Global HQ</span>
-            <span className="flex items-center gap-2"><Mail size={12} className="text-accent"/> support@apex.fit</span>
+            <span className="flex items-center gap-2"><MapPin size={12} className="text-accent" /> Global HQ</span>
+            <span className="flex items-center gap-2"><Mail size={12} className="text-accent" /> support@apex.fit</span>
           </div>
 
           {/* Arxa fona nəhəng tekst dekorasiyası */}

@@ -4,6 +4,7 @@ import {
   Dumbbell, ShoppingCart, User as UserIcon, ChevronDown, Menu, X, LogIn, 
   Layers, BookOpen, HelpCircle 
 } from 'lucide-react';
+import { Button } from '@/components/ui/shared/button';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
@@ -116,9 +117,9 @@ const Navbar = () => {
                         </Link>
                         
                         {/* PROFILE BUTTON - 'My Profile' yazısı ilə */}
-                        <button 
+                        <Button 
                             onClick={handleProfileClick}
-                            className="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-full border border-white/5 transition-all group"
+                            className="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 h-auto px-4 py-2 rounded-full border border-white/5 transition-all group"
                         >
                             {user ? (
                                 <>
@@ -133,15 +134,16 @@ const Navbar = () => {
                                     <span className="text-sm font-semibold text-zinc-400 group-hover:text-white transition-colors">Login</span>
                                 </>
                             )}
-                        </button>
+                        </Button>
 
                         {/* HAMBURGER TOGGLE */}
-                        <button 
+                        <Button
+                            variant="ghost"
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="md:hidden p-2 text-zinc-300 hover:text-white transition-colors"
+                            className="md:hidden p-2 h-auto text-zinc-300 hover:text-white hover:bg-transparent transition-colors"
                         >
                             {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </nav>
@@ -177,13 +179,14 @@ const Navbar = () => {
 
                         {/* 3. WORKOUTS (Accordion) */}
                         <div className="flex flex-col">
-                            <button 
+                            <Button
+                                variant="ghost"
                                 onClick={() => toggleMobileSubmenu('workouts')} 
-                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors ${mobileSubmenu === 'workouts' ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors h-auto p-0 hover:bg-transparent ${mobileSubmenu === 'workouts' ? 'text-white' : 'text-white/60 hover:text-white'}`}
                             >
                                 Workouts
                                 <ChevronDown className={`transition-transform duration-300 ${mobileSubmenu === 'workouts' ? 'rotate-180 text-accent' : ''}`} size={32} />
-                            </button>
+                            </Button>
                             
                             {/* Submenu */}
                             <div className={`overflow-hidden transition-all duration-300 ease-in-out ${mobileSubmenu === 'workouts' ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
@@ -209,13 +212,14 @@ const Navbar = () => {
 
                         {/* 5. MORE (Accordion) */}
                         <div className="flex flex-col">
-                            <button 
+                            <Button
+                                variant="ghost"
                                 onClick={() => toggleMobileSubmenu('more')} 
-                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors ${mobileSubmenu === 'more' ? 'text-white' : 'text-white/60 hover:text-white'}`}
+                                className={`flex items-center justify-between text-4xl font-black italic uppercase tracking-tighter transition-colors h-auto p-0 hover:bg-transparent ${mobileSubmenu === 'more' ? 'text-white' : 'text-white/60 hover:text-white'}`}
                             >
                                 More
                                 <ChevronDown className={`transition-transform duration-300 ${mobileSubmenu === 'more' ? 'rotate-180 text-accent' : ''}`} size={32} />
-                            </button>
+                            </Button>
                             
                             {/* Submenu */}
                             <div className={`overflow-hidden transition-all duration-300 ease-in-out ${mobileSubmenu === 'more' ? 'max-h-40 mt-4 opacity-100' : 'max-h-0 opacity-0'}`}>
@@ -235,9 +239,9 @@ const Navbar = () => {
                     <div className="grid grid-cols-2 gap-4 mt-auto">
                         
                         {/* 1. Login / Profile Button */}
-                        <button 
+                        <Button
                             onClick={handleProfileClick} 
-                            className="bg-white/5 border border-white/10 p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all group"
+                            className="bg-white/5 border border-white/10 h-auto p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all group hover:bg-white/5"
                         >
                             {user ? (
                                 <>
@@ -252,17 +256,21 @@ const Navbar = () => {
                                     <span className="font-bold text-[10px] uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Login</span>
                                 </>
                             )}
-                        </button>
+                        </Button>
                         
                         {/* 2. Checkout Button */}
-                        <Link 
-                            to="/store" 
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="bg-accent text-black p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_0_20px_rgba(212,244,88,0.2)] hover:bg-[#c9e82e]"
+                        <Button
+                            asChild
+                            className="bg-accent text-black h-auto p-6 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all shadow-[0_0_20px_rgba(212,244,88,0.2)] hover:bg-[#c9e82e]"
                         >
-                            <ShoppingCart size={28} />
-                            <span className="font-bold text-[10px] uppercase tracking-widest">Checkout</span>
-                        </Link>
+                            <Link 
+                                to="/store" 
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                <ShoppingCart size={28} />
+                                <span className="font-bold text-[10px] uppercase tracking-widest">Checkout</span>
+                            </Link>
+                        </Button>
                     </div>
 
                 </div>

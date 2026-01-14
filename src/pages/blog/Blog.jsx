@@ -1,5 +1,7 @@
 import React from 'react';
 import { Calendar, User, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardHeader } from '@/components/ui/shared/card';
+import { Button } from '@/components/ui/shared/button';
 
 const blogPosts = [
   {
@@ -94,22 +96,24 @@ const Blog = () => {
         {/* Məqalələr Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
-                <div key={post.id} className="group bg-[#121212] border border-white/10 rounded-3xl overflow-hidden hover:border-accent/50 transition-all duration-300">
+                <Card key={post.id} className="group bg-[#121212] border border-white/10 rounded-3xl overflow-hidden hover:border-accent/50 transition-all duration-300 shadow-none flex flex-col h-full">
                     
                     {/* Şəkil */}
-                    <div className="h-48 overflow-hidden relative">
-                        <img 
-                            src={post.image} 
-                            alt={post.title} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                        />
-                        <div className="absolute top-4 left-4 bg-accent text-black text-xs font-bold px-3 py-1 rounded-full uppercase">
-                            {post.category}
+                    <CardHeader className="p-0">
+                        <div className="h-48 overflow-hidden relative">
+                            <img 
+                                src={post.image} 
+                                alt={post.title} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                            />
+                            <div className="absolute top-4 left-4 bg-accent text-black text-xs font-bold px-3 py-1 rounded-full uppercase">
+                                {post.category}
+                            </div>
                         </div>
-                    </div>
+                    </CardHeader>
 
                     {/* Məzmun */}
-                    <div className="p-6">
+                    <CardContent className="p-6 flex flex-col flex-1">
                         <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
                             <span className="flex items-center gap-1"><Calendar size={12} /> {post.date}</span>
                             <span className="flex items-center gap-1"><User size={12} /> {post.author}</span>
@@ -119,15 +123,18 @@ const Blog = () => {
                             {post.title}
                         </h3>
                         
-                        <p className="text-gray-400 text-sm mb-6 line-clamp-2">
+                        <p className="text-gray-400 text-sm mb-6 line-clamp-2 flex-1">
                             {post.excerpt}
                         </p>
 
-                        <button className="flex items-center gap-2 text-white text-sm font-bold group-hover:gap-3 transition-all">
+                        <Button 
+                            variant="ghost" 
+                            className="flex items-center cursor-pointer gap-2 text-white text-sm font-bold group-hover:gap-3 transition-all h-auto p-0 hover:bg-transparent w-fit"
+                        >
                             Oxumağa Davam Et <ArrowRight size={16} className="text-accent" />
-                        </button>
-                    </div>
-                </div>
+                        </Button>
+                    </CardContent>
+                </Card>
             ))}
         </div>
 

@@ -1,5 +1,8 @@
 import React from 'react';
 import { FaTrash, FaPlus, FaMinus } from 'react-icons/fa';
+import { Card } from '@/components/ui/shared/card';
+import { Input } from '@/components/ui/shared/input';
+import { Button } from '@/components/ui/shared/button';
 
 const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
   
@@ -31,7 +34,7 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
   };
 
   return (
-    <div className="bg-[#202024] rounded-xl border border-white/5 overflow-hidden mb-3 animate-in slide-in-from-bottom-2">
+    <Card className="bg-[#202024] rounded-xl border border-white/5 overflow-hidden mb-3 animate-in slide-in-from-bottom-2 shadow-none">
       
       {/* Header: Name & Remove */}
       <div className="flex justify-between items-center p-4 bg-[#27272a] border-b border-white/5">
@@ -39,12 +42,13 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
           <img src={exercise.image} alt="" className="w-8 h-8 rounded object-cover opacity-80" />
           <h4 className="font-bold text-sm text-white">{exercise.name}</h4>
         </div>
-        <button 
+        <Button 
+          variant="ghost"
           onClick={() => onRemove(dayId, exercise.uniqueId)} 
-          className="text-zinc-600 hover:text-red-500 transition-colors"
+          className="text-zinc-600 hover:text-red-500 hover:bg-transparent transition-colors h-auto p-0"
         >
           <FaTrash size={12} />
-        </button>
+        </Button>
       </div>
 
       {/* Sets Table (Jefit Style) */}
@@ -72,9 +76,9 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
 
               {/* KG Input */}
               <div className="col-span-3">
-                <input 
+                <Input 
                   type="number" 
-                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-sm text-white py-1 focus:border-neon-green focus:outline-none transition-colors font-mono"
+                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-sm text-white h-8 focus:border-neon-green focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors font-mono"
                   placeholder="0"
                   value={set.kg === 0 ? '' : set.kg}
                   onChange={(e) => updateSetField(set.id, 'kg', e.target.value)}
@@ -83,9 +87,9 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
 
               {/* Reps Input */}
               <div className="col-span-3">
-                <input 
+                <Input 
                   type="number" 
-                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-sm text-white py-1 focus:border-neon-green focus:outline-none transition-colors font-mono"
+                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-sm text-white h-8 focus:border-neon-green focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors font-mono"
                   value={set.reps}
                   onChange={(e) => updateSetField(set.id, 'reps', e.target.value)}
                 />
@@ -93,9 +97,9 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
 
                {/* Rest Input */}
                <div className="col-span-2">
-                <input 
+                <Input 
                   type="number" 
-                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-xs text-zinc-400 py-1 focus:border-neon-green focus:outline-none transition-colors font-mono"
+                  className="w-full bg-black/40 border border-zinc-700 rounded text-center text-xs text-zinc-400 h-8 focus:border-neon-green focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors font-mono"
                   value={set.rest}
                   onChange={(e) => updateSetField(set.id, 'rest', e.target.value)}
                 />
@@ -103,13 +107,14 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
 
               {/* Delete Set Button */}
               <div className="col-span-1 flex justify-center">
-                <button 
+                <Button
+                  variant="ghost"
                   onClick={() => removeSet(set.id)}
-                  className="text-zinc-700 hover:text-red-500 transition-colors disabled:opacity-0"
+                  className="text-zinc-700 hover:text-red-500 hover:bg-transparent transition-colors disabled:opacity-0 h-auto p-0"
                   disabled={exercise.sets.length === 1}
                 >
                   <FaMinus size={10} />
-                </button>
+                </Button>
               </div>
 
             </div>
@@ -117,15 +122,16 @@ const ExerciseCard = ({ exercise, dayId, onRemove, onUpdateSets }) => {
         </div>
 
         {/* Add Set Button */}
-        <button 
+        <Button 
+          variant="ghost"
           onClick={addSet}
-          className="w-full mt-3 py-2 text-xs font-bold uppercase tracking-wider text-zinc-500 hover:text-neon-green hover:bg-zinc-800/50 rounded transition-all flex items-center justify-center gap-2"
+          className="w-full mt-3 h-auto py-2 text-xs font-bold uppercase tracking-wider text-zinc-500 hover:text-neon-green hover:bg-zinc-800/50 rounded transition-all flex items-center justify-center gap-2"
         >
           <FaPlus size={10} /> Add Set
-        </button>
+        </Button>
 
       </div>
-    </div>
+    </Card>
   );
 };
 
