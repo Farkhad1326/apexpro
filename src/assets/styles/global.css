@@ -8,7 +8,7 @@
 /* -------------------------------------------------------------------------- */
 @theme {
   --font-sans: "Inter", sans-serif;
-  
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -16,7 +16,7 @@
   /* 🔥 LIME RƏNGİ (Dəyişməz) */
   --color-primary: #D4F458; 
   --color-primary-foreground: #000000;
-  
+
   --color-accent: #D4F458;
   --color-accent-foreground: #000000;
 
@@ -56,6 +56,14 @@
   --destructive: #ef4444;
   --border: #e4e4e7;
   --input: #e4e4e7;
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 .dark {
@@ -72,13 +80,20 @@
   --destructive: #7f1d1d;
   --border: #27272a;
   --input: #27272a;
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
 /* -------------------------------------------------------------------------- */
 /* 3. ANIMASIYALAR (MANUAL CSS - QƏTİ HƏLL)                                  */
 /* -------------------------------------------------------------------------- */
 
-/* Burda biz animasiyanı Tailwind config-ə yox, birbaşa CSS-ə yazırıq */
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(calc(-100% - var(--gap))); }
@@ -89,7 +104,6 @@
   to { transform: translateY(calc(-100% - var(--gap))); }
 }
 
-/* Klassları əl ilə yaradırıq */
 .animate-marquee {
   animation: marquee var(--duration) linear infinite;
 }
@@ -99,7 +113,7 @@
 }
 
 /* -------------------------------------------------------------------------- */
-/* 4. BASE STİLLƏR                                                           */
+/* 4. BASE STİLLƏR VƏ UTILITIES (OUTLINE YAZI BURADADIR)                     */
 /* -------------------------------------------------------------------------- */
 
 @layer base {
@@ -112,6 +126,12 @@
 }
 
 @layer utilities {
+  /* 🔥 LIMITS YAZISINI KONTURLU EDƏN KOD 🔥 */
+  .text-outline {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.8);
+    color: transparent;
+  }
+
   .container {
     width: 100%;
     margin-left: auto;
@@ -120,4 +140,15 @@
     padding-right: 1.5rem;
     max-width: 1440px;
   }
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }

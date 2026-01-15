@@ -1,9 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-// Auth Imports (Təhlükəsizlik üçün)
-import { AuthProvider } from '../src/context/AuthContext'; // <--- YENİ
-import ProtectedRoute from '../src/pages/auth/ProtectedRoute'; // <--- YENİ
+// Auth Imports
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './pages/auth/ProtectedRoute';
 
 // Public Layouts & Pages
 import Layout from './components/layout/Layout';
@@ -18,48 +18,44 @@ import FAQ from './pages/FAQsec/FAQ';
 import AuthPage from './pages/auth/AuthPage';
 import NotFound from './pages/NotFound';
 
-// Dashboard Layouts & Pages
+// --- DASHBOARD SİSTEMİ ---
 import DashboardLayout from './components/layout/DashboardLayout';
-import DashboardHome from './pages/dashboard/Home';
-import MyRoutines from './pages/dashboard/MyRoutines';
-import MyExercises from './pages/dashboard/MyExercises';
-import Settings from './pages/dashboard/Settings';
-import Premium from './pages/dashboard/Premium';
+
+// =========================================================
+// 🔴 DİQQƏT: BURADA YOLLARI DÜZƏLTDİM
+// =========================================================
+
+// 1. KÖHNƏLƏR (Bunlar hələ də 'pages' qovluğundadır)
+import DashboardHome from './pages/dashboard/Home'; 
+import MyRoutines from './pages/dashboard/MyRoutines';   // <-- DÜZƏLDİ
+import MyExercises from './pages/dashboard/MyExercises'; // <-- DÜZƏLDİ
+
+// 2. YENİLƏR (Bunları bayaq 'src/dashboard' içində yaratdıq)
+// Əgər xəta versə, deməli bunları da 'pages' içinə atmısan. 
+// O zaman başındakı './' yerinə './pages/' yaz.
+import DietPlan from './pages/dashboard/DietPlan/index';         
+import ProgressTracker from './pages/dashboard/ProgressTracker/index'; 
 
 function App() {
   return (
-    // 1. AuthProvider bütün tətbiqi əhatə edir ki, Login məlumatını hər yerdə bilək
     <AuthProvider>
       <Routes>
         
-        {/* ================================================
-            PUBLIC ZONE (Hər kəsə açıq)
-           ================================================ */}
+        {/* PUBLIC ZONE */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-
-          {/* Public Databases */}
           <Route path="workouts" element={<BrowseWorkouts />} />
           <Route path="workouts/:id" element={<WorkoutDetail />} />
           <Route path="exercises" element={<ExerciseLibrary />} />
-
-          {/* Tools */}
           <Route path="builder" element={<RoutineBuilder />} />
-
-          {/* Others */}
           <Route path="store" element={<Store />} />
           <Route path="blog" element={<Blog />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="auth" element={<AuthPage />} />
-
           <Route path="*" element={<NotFound />} />
         </Route>
 
-        {/* ================================================
-            PRIVATE ZONE (Dashboard - Qorunan Hissə)
-            Buraya ProtectedRoute əlavə etdik. 
-            Login olmayan girə bilməz.
-           ================================================ */}
+        {/* DASHBOARD ZONE */}
         <Route 
           path="/dashboard" 
           element={
@@ -68,14 +64,20 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<DashboardHome />} />          {/* /dashboard */}
-          <Route path="routines" element={<MyRoutines />} />   {/* /dashboard/routines */}
-          <Route path="exercises" element={<MyExercises />} /> {/* /dashboard/exercises */}
-          <Route path="settings" element={<Settings />} />     {/* /dashboard/settings */}
-          <Route path="premium" element={<Premium />} />       {/* /dashboard/premium */}
+            <Route index element={<DashboardHome />} />
+            
+            {/* Routines Database */}
+            <Route path="routines" element={<MyRoutines />} />
+            
+            {/* Exercises Database */}
+            <Route path="exercises" element={<MyExercises />} />
+            
+            {/* Yeni Səhifələr */}
+            <Route path="diet" element={<DietPlan />} />
+            <Route path="progress" element={<ProgressTracker />} />
+
         </Route>
 
-        {/* Profilə basanda Dashboarda atır (Artıq Dashboard qorunur) */}
         <Route path="/profile" element={<Navigate to="/dashboard" replace />} />
 
       </Routes>
