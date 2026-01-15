@@ -13,6 +13,9 @@ import WorkoutDetail from './pages/workouts/WorkoutDetail';
 import ExerciseLibrary from './pages/exercises/ExerciseLibrary';
 import RoutineBuilder from './pages/builder/RoutineBuilder';
 import Store from './pages/store/Store';
+import ProductDetail from './pages/store/ProductDetail';
+import Checkout from './pages/store/Checkout';
+import OrderConfirmation from './pages/store/OrderConfirmation';
 import Blog from './pages/blog/Blog';
 import FAQ from './pages/FAQsec/FAQ';
 import AuthPage from './pages/auth/AuthPage';
@@ -49,6 +52,9 @@ function App() {
           <Route path="exercises" element={<ExerciseLibrary />} />
           <Route path="builder" element={<RoutineBuilder />} />
           <Route path="store" element={<Store />} />
+          <Route path="store/product/:slug" element={<ProductDetail />} />
+          <Route path="store/checkout" element={<Checkout />} />
+          <Route path="store/order-confirmation/:orderId" element={<OrderConfirmation />} />
           <Route path="blog" element={<Blog />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="auth" element={<AuthPage />} />

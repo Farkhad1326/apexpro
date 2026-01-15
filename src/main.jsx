@@ -6,6 +6,8 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import { PlanProvider } from './context/PlanContext.jsx' // 👈 ƏLAVƏ ET
 import { RoutineProvider } from '../src/context/RoutineContext.jsx' // <--- IMPORT ET
 import { ExerciseProvider } from './context/ExerciseContext'; // <--- YENİ
+import { CartProvider } from './context/CartContext.jsx'; // <--- SHOP CART
+import { Toaster } from 'react-hot-toast';
 import './assets/styles/global.css'
 
 
@@ -16,7 +18,25 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <PlanProvider>
           <RoutineProvider>
             <ExerciseProvider>
-              <App />
+              <CartProvider>
+                <App />
+                <Toaster 
+                  position="top-right"
+                  toastOptions={{
+                    style: {
+                      background: '#1a1a1a',
+                      color: '#fff',
+                      border: '1px solid rgba(212, 244, 88, 0.2)'
+                    },
+                    success: {
+                      iconTheme: {
+                        primary: '#D4F458',
+                        secondary: '#000'
+                      }
+                    }
+                  }}
+                />
+              </CartProvider>
             </ExerciseProvider>
           </RoutineProvider>
         </PlanProvider>
