@@ -49,7 +49,7 @@ const Navbar = () => {
     return (
         <>
             {/* ================= DESKTOP NAVBAR (Standart) ================= */}
-            <nav className="fixed top-0 w-full z-[100] bg-black/80 backdrop-blur-xl border-b border-white/5 text-white">
+            <nav className="fixed top-0 w-full z-[100] bg-black/30 backdrop-blur-xl border-b border-white/5 text-white">
                 <div className="container h-20 flex items-center justify-between">
                     
                     {/* LOGO */}

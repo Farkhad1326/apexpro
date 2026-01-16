@@ -26,6 +26,12 @@ export default {
         'slow-zoom': 'zoom 20s infinite alternate', // Yavaşca yaxınlaşma (Hero şəkilləri üçün)
         'in': 'fadeIn 0.5s ease-out', // Səhifə açılanda elementlərin gəlişi
         "meteor-effect": "meteor 5s linear infinite", // Meteor effekti üçün
+        // YENİ ƏLAVƏLƏR: Pulsating, Shiny, Gradient, Sparkle, FadeInOut animasiyaları
+        pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        shine: 'shine 1s linear infinite',
+        gradient: 'gradient 3s ease infinite',
+        sparkle: 'sparkle 1s ease-in-out infinite',
+        fadeInOut: 'fadeInOut 3s ease-in-out infinite',
       },
 
       // 3. Animasiya Qaydaları (Keyframes)
@@ -46,6 +52,31 @@ export default {
             transform: "rotate(215deg) translateX(-500px)",
             opacity: "0",
           },
+        },
+        // YENİ ƏLAVƏLƏR: Pulsating, Shiny, Gradient, Sparkle, FadeInOut keyframes
+        pulse: {
+          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+          '50%': { opacity: '0.5', transform: 'scale(1.05)' },
+        },
+        shine: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+        gradient: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
+        },
+        sparkle: {
+          '0%': { opacity: '0', transform: 'scale(0)' },
+          '50%': { opacity: '1', transform: 'scale(1)' },
+          '100%': { opacity: '0', transform: 'scale(0)' },
+        },
+        fadeInOut: {
+          '0%': { opacity: '0' },
+          '10%': { opacity: '1' },
+          '90%': { opacity: '1' },
+          '100%': { opacity: '0' },
         },
       },
     },

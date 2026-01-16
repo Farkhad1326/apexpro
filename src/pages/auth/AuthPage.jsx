@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+// Yolu öz layihənə uyğun yoxla (məs: ../context/AuthContext)
+import { useAuth } from '@/context/AuthContext'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { User, Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/shared/button';
@@ -9,7 +10,10 @@ const heroBg = "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=8
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
-    const { login } = useAuth();
+    
+    // CONTEXT INTEGRATION: login və signup funksiyalarını çağırırıq
+    const { login, signup } = useAuth();
+    
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -27,25 +31,35 @@ const AuthPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setError('');
 
+        // UX üçün kiçik gecikmə (Sanki serverə sorğu gedir)
         setTimeout(() => {
             try {
                 if (isLogin) {
-                    login({ email: formData.email, name: formData.name || 'User' });
-                    navigate(from, { replace: true });
+                    // --- LOGIN LOGIC ---
+                    // Context-dəki login funksiyasını çağırırıq
+                    login(formData.email, formData.password);
                 } else {
-                    if (!formData.name) {
-                        setIsLoading(false);
-                        return setError("Name is required.");
-                    }
-                    login({ email: formData.email, name: formData.name });
-                    navigate(from, { replace: true });
+                    // --- SIGNUP LOGIC ---
+                    if (!formData.name) throw new Error("Name is required.");
+                    
+                    // 1. Qeydiyyatdan keçiririk
+                    signup(formData.name, formData.email, formData.password);
+                    
+                    // 2. Avtomatik Giriş (Auto-Login) edirik ki, user təkrar login etməsin
+                    login(formData.email, formData.password);
                 }
+                
+                // Uğurlu olsa yönləndiririk
+                navigate(from, { replace: true });
+
             } catch (err) {
-                setError("Something went wrong. Please try again.");
+                // Context-dən gələn xətanı göstəririk (məs: "Invalid email")
+                setError(err.message || "Something went wrong. Please try again.");
                 setIsLoading(false);
             }
-        }, 1200);
+        }, 1000); // 1 saniyəlik "loading" effekti
     };
 
     return (

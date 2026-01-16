@@ -29,6 +29,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/shared/avat
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/shared/dropdown-menu"
 import { useLocation, Link } from "react-router-dom"
 
+// --- YENİ HİSSƏ: Auth Context ---
+import { useAuth } from "@/context/AuthContext" // Yolun düzgünlüyünü yoxla (src/context/AuthContext)
+
 const data = {
   main: [
     { title: "Overview", url: "/dashboard", icon: LayoutDashboard },
@@ -45,15 +48,21 @@ const data = {
   ]
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }) {
   const location = useLocation?.(); 
   const currentPath = location?.pathname || "/";
   const { toggleSidebar, isMobile } = useSidebar(); 
+  
+  // --- YENİ HİSSƏ: User Data ---
+  const { user, logout } = useAuth(); // Context-dən user və logout götürürük
+
+  // Əgər user hələ yüklənməyibsə (null), default ad qoyaq ki, xəta verməsin
+  const currentUser = user || { fullName: "Guest User", email: "guest@apex.com" };
+  const initials = currentUser.fullName ? currentUser.fullName.charAt(0).toUpperCase() : "G";
 
   return (
     <Sidebar 
       collapsible="icon" 
-      // 🛑 SENIOR FIX: "md:!relative" -> Bu kod Sidebar-ı "Havada qalmaqdan" xilas edir və yerə endirir.
       className="border-r border-white/5 bg-black md:!relative fixed inset-y-0 z-50" 
       {...props}
     >
@@ -106,7 +115,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
 
-      {/* FOOTER */}
+      {/* FOOTER - USER PROFILE */}
       <SidebarFooter className="p-3 pb-4 gap-2">
         <SidebarMenu>
            <SidebarMenuItem>
@@ -123,19 +132,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg" className="h-12 data-[state=open]:bg-white/5 hover:bg-white/5 transition-all duration-300 rounded-xl border border-transparent hover:border-white/5">
                   <Avatar className="h-8 w-8 rounded-lg border border-white/10">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="User" />
-                    <AvatarFallback className="rounded-lg bg-neutral-800 text-white">EM</AvatarFallback>
+                    {/* Userin şəkli yoxdursa Baş hərfini göstərir */}
+                    <AvatarImage src="" alt={currentUser.fullName} />
+                    <AvatarFallback className="rounded-lg bg-primary text-black font-bold">
+                        {initials}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
-                    <span className="truncate font-bold text-white">Emil Məmmədov</span>
-                    <span className="truncate text-xs text-gray-500">Pro Member</span>
+                    <span className="truncate font-bold text-white">{currentUser.fullName}</span>
+                    <span className="truncate text-xs text-gray-500">{currentUser.email}</span>
                   </div>
                   <Settings className="ml-auto size-4 text-gray-600 group-data-[collapsible=icon]:hidden" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-xl bg-neutral-900 border-white/10 text-white" side="bottom" align="end" sideOffset={4}>
                 <DropdownMenuItem className="focus:bg-white/10 cursor-pointer"><User className="mr-2 h-4 w-4" /> Account</DropdownMenuItem>
-                <DropdownMenuItem className="text-red-500 focus:bg-red-500/10 cursor-pointer"><LogOut className="mr-2 h-4 w-4" /> Log out</DropdownMenuItem>
+                
+                {/* LOGOUT BUTTON - ARTIQ İŞLƏYİR */}
+                <DropdownMenuItem onClick={logout} className="text-red-500 focus:bg-red-500/10 cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" /> Log out
+                </DropdownMenuItem>
+              
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
